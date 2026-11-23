@@ -64,11 +64,15 @@ jobs:
       contents: read
       pull-requests: write
     env:
-      ARM_CLIENT_ID: "${{ vars.AZURE_CLIENT_ID }}"
-      ARM_SUBSCRIPTION_ID: "${{ vars.AZURE_SUBSCRIPTION_ID }}"
-      ARM_TENANT_ID: "${{ vars.AZURE_TENANT_ID }}"
+      ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+      ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+      ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
       ARM_USE_AZUREAD: true
       ARM_USE_OIDC: true
+      # Identifiers are secrets, so they're masked in this public repo's logs.
+      TF_VAR_subscription_ids: '{"management":"${{ secrets.SUBSCRIPTION_ID_MANAGEMENT }}","connectivity":"${{ secrets.SUBSCRIPTION_ID_CONNECTIVITY }}"}'
+      TF_VAR_app_subscription_ids: '{"nonprod":"${{ secrets.SUBSCRIPTION_ID_APPS_NONPROD }}","prod":"${{ secrets.SUBSCRIPTION_ID_APPS_PROD }}"}'
+      TF_VAR_security_contact_email: "${{ secrets.SECURITY_CONTACT_EMAIL }}"
     steps:
       - name: Checkout Code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
